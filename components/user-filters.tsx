@@ -7,6 +7,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
+import { inputBase } from "@/lib/styles";
 
 type UserFiltersProps = {
   initialSearch: string;
@@ -24,11 +25,21 @@ export function UserFilters({
   const [search, setSearch] = useState(initialSearch);
   const [role, setRole] = useState(initialRole);
 
+  const [syncedFrom, setSyncedFrom] = useState({
+    search: initialSearch,
+    role: initialRole,
+  });
+
   // Keep the inputs in sync when URL navigation changes their values.
-  useEffect(() => {
+  // Adjusting state during render avoids the extra pass an effect would cause.
+  if (
+    syncedFrom.search !== initialSearch ||
+    syncedFrom.role !== initialRole
+  ) {
+    setSyncedFrom({ search: initialSearch, role: initialRole });
     setSearch(initialSearch);
     setRole(initialRole);
-  }, [initialSearch, initialRole]);
+  }
 
   // Update the search URL after typing pauses.
   useEffect(() => {
@@ -81,24 +92,37 @@ export function UserFilters({
   }
 
   return (
-    <div className="mt-6 flex flex-wrap items-end gap-4">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="user-search" className="text-sm font-medium">
+    <div className="flex flex-wrap items-center gap-3">
+      <div className="relative w-full sm:w-72">
+        <label htmlFor="user-search" className="sr-only">
           Search by name
         </label>
+
+        <svg
+          aria-hidden
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-400"
+        >
+          <path
+            fillRule="evenodd"
+            d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.45 4.39l3.08 3.08a.75.75 0 1 1-1.06 1.06l-3.08-3.08A7 7 0 0 1 2 9Z"
+            clipRule="evenodd"
+          />
+        </svg>
 
         <input
           id="user-search"
           type="search"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Enter a name..."
-          className="rounded border px-3 py-2"
+          placeholder="Search by name..."
+          className={`${inputBase} pl-9`}
         />
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="user-role" className="text-sm font-medium">
+      <div className="w-full sm:w-44">
+        <label htmlFor="user-role" className="sr-only">
           Filter by role
         </label>
 
@@ -106,7 +130,7 @@ export function UserFilters({
           id="user-role"
           value={role}
           onChange={(event) => handleRoleChange(event.target.value)}
-          className="rounded border px-3 py-2"
+          className={inputBase}
         >
           <option value="">All roles</option>
           <option value="admin">Admin</option>

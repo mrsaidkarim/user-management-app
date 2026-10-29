@@ -1,27 +1,27 @@
-
 import Link from "next/link";
+import { buttonPrimary, buttonSecondary } from "@/lib/styles";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-8 text-gray-900">
-      <h1 className="text-4xl font-bold">User Management</h1>
+    <main className="flex flex-col items-center py-16 text-center sm:py-24">
+      <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-medium text-teal-800 ring-1 ring-teal-600/20">
+        Admin dashboard
+      </span>
 
-      <p className="mt-4 text-gray-600">
+      <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
+        User Management
+      </h1>
+
+      <p className="mt-4 max-w-md text-gray-600">
         Manage users, roles, and salary information.
       </p>
 
-      <nav className="mt-8 flex gap-4">
-        <Link
-          href="/users"
-          className="rounded-md bg-teal-700 px-5 py-3 text-white hover:bg-teal-800"
-        >
+      <nav className="mt-8 flex flex-wrap justify-center gap-3">
+        <Link href="/users" className={`${buttonPrimary} px-5 py-2.5`}>
           View Users
         </Link>
 
-        <Link
-          href="/projects"
-          className="rounded-md border border-gray-300 px-5 py-3 hover:bg-gray-100"
-        >
+        <Link href="/projects" className={`${buttonSecondary} px-5 py-2.5`}>
           View Projects
         </Link>
       </nav>

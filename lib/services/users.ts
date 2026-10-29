@@ -81,3 +81,26 @@ export async function deleteUser(id: string) {
     where: { id },
   });
 }
+
+export async function getUsersForStats({
+  role,
+  search,
+}: {
+  role?: "admin" | "member";
+  search?: string;
+}) {
+  const where: Prisma.UserWhereInput = {
+    ...(role ? { role } : {}),
+    ...(search
+      ? { name: { contains: search, mode: "insensitive" } }
+      : {}),
+  };
+
+  return prisma.user.findMany({
+    where,
+    select: {
+      salary: true,
+      startDate: true,
+    },
+  });
+}
