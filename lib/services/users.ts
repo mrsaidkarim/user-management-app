@@ -2,6 +2,7 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { paginate } from "@/lib/pagination";
+import type { UpdateUserInput, UserInput } from "@/lib/validators/user";
 
 type GetUsersOptions = {
   page: number;
@@ -37,4 +38,46 @@ export async function getUsers({
     users,
     ...pagination,
   };
+}
+
+export async function getUserById(id: string) {
+  return prisma.user.findUnique({
+    where: { id },
+  });
+}
+
+export async function createUser(input: UserInput) {
+  return prisma.user.create({
+    data: {
+      ...input,
+      salary: new Prisma.Decimal(input.salary),
+      startDate: new Date(`${input.startDate}T00:00:00.000Z`),
+    },
+  });
+}
+
+export async function updateUser(
+  id: string,
+  input: UpdateUserInput,
+) {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      ...input,
+      salary:
+        input.salary === undefined
+          ? undefined
+          : new Prisma.Decimal(input.salary),
+      startDate:
+        input.startDate === undefined
+          ? undefined
+          : new Date(`${input.startDate}T00:00:00.000Z`),
+    },
+  });
+}
+
+export async function deleteUser(id: string) {
+  return prisma.user.delete({
+    where: { id },
+  });
 }

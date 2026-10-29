@@ -16,4 +16,15 @@ export const userSchema = z.object({
   startDate: z.iso.date("Start date must use YYYY-MM-DD format"),
 });
 
+export const updateUserSchema = userSchema
+  .omit({ role: true })
+  .partial()
+  .extend({
+    role: z.enum(["admin", "member"]).optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided",
+  });
+
 export type UserInput = z.infer<typeof userSchema>;
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;
