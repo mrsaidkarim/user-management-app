@@ -153,3 +153,6 @@ vite.config.ts.timestamp-*
 .DS_Store
 *.pem
 next-env.d.ts
+
+# Prisma generated client
+/generated/prisma
